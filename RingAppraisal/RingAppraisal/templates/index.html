@@ -1,0 +1,129 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+
+<div class="jumbotron text-center">
+    <h1>Appraise your gold rings for free!</h1>
+</div>
+<form method="POST" action="">
+    <div class="row">
+        <div class="col-md-3 calc-button-div">
+            <button type="submit" class="calc-button"><h3>CALCULATE</h3></button>
+        </div>
+        <div class="col-md-3 text-center">
+            <h2>Estimated Value:</h2>
+        </div>
+        <div class="col-md-5 text-center" id="value-display-div">
+            <div class="jumbotron" id="value-display-box">&nbsp;</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3 text-center">
+            <h2>Primary Stone</h2>
+            <fieldset class="sub-property-div">
+                <div>
+                    <input type="radio" id="primary-none" name="primary-stone" value="none" checked>
+                    <label for="primary-none">none</label>
+                </div>
+                {% for val in ring_properties_dict.primary_stone.keys() | sort() %}
+                <div>
+                    <input type="radio" id="primary-{{val}}" name="primary-stone" value="{{val}}">
+                    <label for="primary-{{val}}">{{val}}</label>
+                    {% if ring_properties_dict.primary_stone[val] %}
+                    {% for prop in ring_properties_dict.primary_stone[val].keys() | sort() %}
+                    <div class="sub-property" id="primary-{{val}}-{{prop}}">
+                        <select name="primary-sub-property-{{prop}}" id="primary-{{val}}-{{prop}}-{{propVal}}">
+                            <option selected class="default-dropdown-option">{{prop}}</option>
+                            {% for propVal in ring_properties_dict.primary_stone[val][prop] | sort() %}
+                            <option value="{{propVal}}">{{propVal}}</option>>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <script>
+                        $('#primary-' + val + '-' + prop + '-' + propVal + ' select').hide(); //initially dropdown is hidden
+                        $('#primary-' + val).change(function () { //change click to hidden
+                            if ($(this).is(':checked')) { //check if checkbox is checked
+                                $('#primary-' + val + '-' + prop + '-' + propVal + ' select').show(); //show if checked
+                            } else {
+                                $('#primary-' + val + '-' + prop + '-' + propVal + ' select').hide(); //hide if unchecked
+                            }
+                        })
+                    </script>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </fieldset>
+        </div>
+        <div class="col-md-3 text-center">
+            <h2>Secondary Stones</h2>
+            <fieldset class="sub-property-div">
+                {% for val in ring_properties_dict.secondary_stones.keys() | sort() %}
+                <div>
+                    <input type="checkbox" id="{{val}}" name="secondary-stone" value="{{val}}">
+                    <label for="{{val}}">{{val}}</label>
+                </div>
+                {% endfor %}
+            </fieldset>
+        </div>
+        <div class="col-md-3 text-center">
+            <h2>Carat Options</h2>
+            <fieldset class="sub-property-div">
+                <legend>Total Diamond Carats</legend>
+                <input type="number" id="total-diamond-carats" value="0" step="0.01" min="0" max="8.00">
+            </fieldset>
+            <fieldset class="sub-property-div">
+                <legend>Total Jewel Carats</legend>
+                <input type="number" id="jewel-weight" value="0" step="0.01" min="0" max="15.00">
+            </fieldset>
+            <fieldset class="sub-property-div">
+                <legend>Gold Carats</legend>
+                <select name="gold-carats" id="gold-carats">
+                    {% for val in ring_properties_dict.gold_carats | sort(reverse = True) %}
+                    <option value="{{val}}">{{val}}</option>
+                    {% endfor %}
+                </select>
+            </fieldset>
+        </div>
+        <div class="col-md-3 text-center">
+            <h2>Additional Options</h2>
+            <fieldset class="sub-property-div">
+                <legend>Brand Quality</legend>
+                {% for val in ring_properties_dict.brand_quality | sort(reverse = True) %}
+                <div>
+                    <input type="radio" id="{{val}}" name="brand-quality" value="{{val}}">
+                    <label for="{{val}}">{{val}}</label>
+                </div>
+                {% endfor %}
+            </fieldset>
+            <fieldset class="sub-property-div">
+                <legend>Gold Color</legend>
+                {% for val in ring_properties_dict.gold_color | sort(reverse = True) %}
+                <div>
+                    <input type="radio" id="{{val}}" name="gold_color" value="{{val}}">
+                    <label for="{{val}}">{{val}}</label>
+                </div>
+                {% endfor %}
+            </fieldset>
+            <fieldset class="sub-property-div">
+                <legend>Other</legend>
+                {% for val in ring_properties_dict.other | sort() %}
+                <div>
+                    <input type="checkbox" id="{{val}}" name="other-properties" value="{{val}}">
+                    <label for="{{val}}">{{val}}</label>
+                </div>
+                {% endfor %}
+            </fieldset>
+        </div>
+    </div>
+    <div class="row">
+        <div class="text-center calc-button-div">
+            <button type="submit" class="calc-button"><h3>CALCULATE</h3></button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
+
