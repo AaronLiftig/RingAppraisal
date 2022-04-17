@@ -42,6 +42,7 @@
     <Folder Include="RingAppraisal\templates\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="RingAppraisal\static\scripts\constants.json" />
     <Content Include="RingAppraisal\static\scripts\script.js" />
     <Content Include="RingAppraisal\templates\about.html" />
     <Content Include="RingAppraisal\templates\contact.html" />

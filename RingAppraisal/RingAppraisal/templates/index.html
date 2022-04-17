@@ -24,33 +24,23 @@
             <h2>Primary Stone</h2>
             <fieldset class="sub-property-div">
                 <div>
-                    <input type="radio" id="primary-none" name="primary-stone" value="none" checked>
+                    <input type="radio" id="primary-none-radio" name="primary-stone" value="none" checked>
                     <label for="primary-none">none</label>
                 </div>
                 {% for val in ring_properties_dict.primary_stone.keys() | sort() %}
                 <div>
-                    <input type="radio" id="primary-{{val}}" name="primary-stone" value="{{val}}">
+                    <input type="radio" id="primary-{{val}}-radio" name="primary-stone" value="{{val}}">
                     <label for="primary-{{val}}">{{val}}</label>
                     {% if ring_properties_dict.primary_stone[val] %}
                     {% for prop in ring_properties_dict.primary_stone[val].keys() | sort() %}
-                    <div class="sub-property" id="primary-{{val}}-{{prop}}">
-                        <select name="primary-sub-property-{{prop}}" id="primary-{{val}}-{{prop}}-{{propVal}}">
+                    <div class="sub-property" id="primary-{{val}}-{{prop}}-dropdown">
+                        <select name="primary-sub-property-{{prop}}" id="primary-{{val}}-{{prop}}-checkbox">
                             <option selected class="default-dropdown-option">{{prop}}</option>
                             {% for propVal in ring_properties_dict.primary_stone[val][prop] | sort() %}
                             <option value="{{propVal}}">{{propVal}}</option>>
                             {% endfor %}
                         </select>
                     </div>
-                    <script>
-                        $('#primary-' + val + '-' + prop + '-' + propVal + ' select').hide(); //initially dropdown is hidden
-                        $('#primary-' + val).change(function () { //change click to hidden
-                            if ($(this).is(':checked')) { //check if checkbox is checked
-                                $('#primary-' + val + '-' + prop + '-' + propVal + ' select').show(); //show if checked
-                            } else {
-                                $('#primary-' + val + '-' + prop + '-' + propVal + ' select').hide(); //hide if unchecked
-                            }
-                        })
-                    </script>
                     {% endfor %}
                     {% endif %}
                 </div>
@@ -61,9 +51,23 @@
             <h2>Secondary Stones</h2>
             <fieldset class="sub-property-div">
                 {% for val in ring_properties_dict.secondary_stones.keys() | sort() %}
+                {% set idVal = val | replace(' ', '-', 2) %}
                 <div>
-                    <input type="checkbox" id="{{val}}" name="secondary-stone" value="{{val}}">
-                    <label for="{{val}}">{{val}}</label>
+                    <input type="checkbox" id="secondary-{{idVal}}-checkbox" name="secondary-stone" value="{{val}}">
+                    <label for="secondary-{{idVal}}-checkbox">{{val}}</label>
+                    {% if ring_properties_dict.secondary_stones[val] %}
+                    {% for prop in ring_properties_dict.secondary_stones[val].keys() | sort() %}
+
+                    <div class="sub-property" id="secondary-{{idVal}}-{{prop}}-dropdown">
+                        <select name="secondary-sub-property-{{prop}}" id="secondary-{{idVal}}-{{prop}}-checkbox">
+                            <option selected class="default-dropdown-option">{{prop}}</option>
+                            {% for propVal in ring_properties_dict.secondary_stones[val][prop] | sort() %}
+                            <option value="{{propVal}}">{{propVal}}</option>>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
                 </div>
                 {% endfor %}
             </fieldset>
