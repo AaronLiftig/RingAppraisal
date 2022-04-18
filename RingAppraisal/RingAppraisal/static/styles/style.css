@@ -57,7 +57,7 @@ input[type="checkbox"].input-validation-error {
     color: white;
 }
 
-.sub-property-div {
+.property-div {
     text-align: left;
     width: 300px;
     padding-left: 100px
