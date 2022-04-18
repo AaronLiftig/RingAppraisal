@@ -96,19 +96,33 @@
             <fieldset class="sub-property-div">
                 <legend>Brand Quality</legend>
                 {% for val in ring_properties_dict.brand_quality | sort(reverse = True) %}
+                {% if loop.index == 1 %}
+                <div>
+                    <input type="radio" id="{{val}}" name="brand-quality" value="{{val}}" checked>
+                    <label for="{{val}}">{{val}}</label>
+                </div>
+                {% else %}
                 <div>
                     <input type="radio" id="{{val}}" name="brand-quality" value="{{val}}">
                     <label for="{{val}}">{{val}}</label>
                 </div>
+                {% endif %}
                 {% endfor %}
             </fieldset>
             <fieldset class="sub-property-div">
                 <legend>Gold Color</legend>
                 {% for val in ring_properties_dict.gold_color | sort(reverse = True) %}
+                {% if loop.index == 1 %}
                 <div>
-                    <input type="radio" id="{{val}}" name="gold_color" value="{{val}}">
+                    <input type="radio" id="{{val}}" name="gold-color" value="{{val}}" checked>
                     <label for="{{val}}">{{val}}</label>
                 </div>
+                {% else %}
+                <div>
+                    <input type="radio" id="{{val}}" name="gold-color" value="{{val}}">
+                    <label for="{{val}}">{{val}}</label>
+                </div>
+                {% endif %}
                 {% endfor %}
             </fieldset>
             <fieldset class="sub-property-div">
