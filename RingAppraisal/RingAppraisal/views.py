@@ -16,8 +16,9 @@ model = joblib.load(model_path)
 def home():
     '''Renders the home page.'''
     if request.method == 'POST':
-        #user = request.form['nm']
-        return redirect(url_for('success',name = user))
+        secondary_stone = request.form['primary-stone']
+        return redirect(url_for('test', data=request.form))
+        #return redirect(url_for('success',name = user))
     else:
         return render_template(
             'index.html',
@@ -25,6 +26,10 @@ def home():
             title='Home Page',
             year=datetime.now().year
     )
+
+@app.route('/test/<data>')
+def test(data):
+    return f"{data}"
 
 @app.route('/contact')
 def contact():

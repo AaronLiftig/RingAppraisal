@@ -30,6 +30,9 @@
     <Compile Include="RingAppraisal\constants.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="RingAppraisal\process_data.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="runserver.py" />
     <Compile Include="RingAppraisal\__init__.py" />
     <Compile Include="RingAppraisal\views.py" />
@@ -37,17 +40,21 @@
   <ItemGroup>
     <Folder Include="RingAppraisal\" />
     <Folder Include="RingAppraisal\static\" />
+    <Folder Include="RingAppraisal\static\data\" />
     <Folder Include="RingAppraisal\static\styles\" />
     <Folder Include="RingAppraisal\static\scripts\" />
     <Folder Include="RingAppraisal\templates\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="RingAppraisal\static\scripts\constants.json" />
+    <Content Include="RingAppraisal\model.pkl" />
+    <Content Include="RingAppraisal\static\data\data.json" />
     <Content Include="RingAppraisal\static\scripts\script.js" />
     <Content Include="RingAppraisal\templates\about.html" />
     <Content Include="RingAppraisal\templates\contact.html" />
     <Content Include="RingAppraisal\templates\index.html" />
     <Content Include="RingAppraisal\templates\layout.html" />
+    <Content Include="RingAppraisal\templates\test.html" />
+    <Content Include="RingAppraisal\reference.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Web.targets" />
   <!-- Specify pre- and post-build commands in the BeforeBuild and 

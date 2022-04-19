@@ -6,7 +6,7 @@
 <div class="jumbotron text-center">
     <h1>Appraise your gold rings for free!</h1>
 </div>
-<form method="POST" action="">
+<form method="post" action="#">
     <div class="row">
         <div class="col-md-3 calc-button-div">
             <button type="submit" class="calc-button"><h3>CALCULATE</h3></button>
@@ -27,16 +27,18 @@
                     <label for="primary-none-radio">none</label>
                 </div>
                 {% for val in ring_properties_dict.primary_stone.keys() | sort() %}
+                {% set idVal = val | replace(' ', '-') %}
                 <div>
-                    <input type="radio" id="primary-{{val}}-radio" name="primary-stone" value="{{val}}">
-                    <label for="primary-{{val}}-radio">{{val}}</label>
+                    <input type="radio" id="primary-{{idVal}}-radio" name="primary-stone" value="{{idVal}}">
+                    <label for="primary-{{idVal}}-radio">{{val}}</label>
                     {% if ring_properties_dict.primary_stone[val] %}
                     {% for prop in ring_properties_dict.primary_stone[val].keys() | sort() %}
-                    <div class="primary-property-radio" id="primary-{{val}}-{{prop}}-dropdown">
-                        <select name="primary-property-{{prop}}" id="primary-{{val}}-{{prop}}-option">
+                    <div class="primary-property-radio" id="primary-{{idVal}}-{{prop}}-dropdown">
+                        <select name="primary-property-{{idVal}}-{{prop}}" id="primary-{{idVal}}-{{prop}}-option">
                             <option selected class="default-dropdown-option">{{prop}}</option>
                             {% for propVal in ring_properties_dict.primary_stone[val][prop] | sort() %}
-                            <option value="{{propVal}}">{{propVal}}</option>>
+                            {% set _propVal = propVal | replace('-', ' ') %}
+                            <option value="{{_propVal}}">{{_propVal}}</option>>
                             {% endfor %}
                         </select>
                     </div>
@@ -52,15 +54,16 @@
                 {% for val in ring_properties_dict.secondary_stones.keys() | sort() %}
                 {% set idVal = val | replace(' ', '-') %}
                 <div>
-                    <input type="checkbox" id="secondary-{{idVal}}-checkbox" name="secondary-stone" value="{{val}}">
+                    <input type="checkbox" id="secondary-{{idVal}}-checkbox" name="secondary-{{idVal}}-stone" value="{{idVal}}">
                     <label for="secondary-{{idVal}}-checkbox">{{val}}</label>
                     {% if ring_properties_dict.secondary_stones[val] %}
                     {% for prop in ring_properties_dict.secondary_stones[val].keys() | sort() %}
                     <div class="secondary-property-checkbox" id="secondary-{{idVal}}-{{prop}}-dropdown">
-                        <select name="secondary-property-{{prop}}" id="secondary-{{idVal}}-{{prop}}-option">
+                        <select name="secondary-property-{{idVal}}-{{prop}}" id="secondary-{{idVal}}-{{prop}}-option">
                             <option selected class="default-dropdown-option">{{prop}}</option>
                             {% for propVal in ring_properties_dict.secondary_stones[val][prop] | sort() %}
-                            <option value="{{propVal}}">{{propVal}}</option>>
+                            {% set _propVal = propVal | replace('-', ' ') %}
+                            <option value="{{_propVal}}">{{_propVal}}</option>>
                             {% endfor %}
                         </select>
                     </div>
@@ -74,11 +77,11 @@
             <h2>Carat Options</h2>
             <fieldset class="property-div">
                 <legend>Total Diamond Carats</legend>
-                <input type="number" id="total-diamond-carats" value="0" step="0.01" min="0" max="8.00">
+                <input type="number" name="total-diamond-carats" id="total-diamond-carats" value="0" step="0.01" min="0" max="8.00">
             </fieldset>
             <fieldset class="property-div">
                 <legend>Total Jewel Carats</legend>
-                <input type="number" id="jewel-weight" value="0" step="0.01" min="0" max="15.00">
+                <input type="number" name="jewel-weight" id="jewel-weight" value="0" step="0.01" min="0" max="15.00">
             </fieldset>
             <fieldset class="property-div">
                 <legend>Gold Carats</legend>
@@ -126,9 +129,10 @@
             <fieldset class="property-div">
                 <legend>Other</legend>
                 {% for val in ring_properties_dict.other | sort() %}
+                {% set _val = val | replace('-', ' ') %}
                 <div>
-                    <input type="checkbox" id="{{val}}" name="other-properties" value="{{val}}">
-                    <label for="{{val}}">{{val}}</label>
+                    <input type="checkbox" id="{{val}}" name="other-{{val}}-properties" value="{{val}}">
+                    <label for="{{val}}">{{_val}}</label>
                 </div>
                 {% endfor %}
             </fieldset>

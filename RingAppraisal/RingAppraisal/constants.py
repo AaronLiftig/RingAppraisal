@@ -1,5 +1,5 @@
 RING_PROPERTIES_DICT = {
-    'brand_quality': ['high end', 'regular'],
+    'brand_quality': ['high-end', 'regular'],
     'gold_color': ['yellow', 'white', 'rose'],
     'gold_carats': [18, 14, 9],
     'primary_stone': {
@@ -19,17 +19,17 @@ RING_PROPERTIES_DICT = {
         'amethyst': {},
         'onyx': {},
         'pearl': {
-            'type' : ['akoya', 'south sea', 'edison fresh water', 'fresh water', 'edison']
+            'type' : ['akoya', 'south-sea', 'edison-fresh-water', 'fresh-water', 'edison']
         },
         'emerald': {
-            'cut': ['baguette brilliant'],
+            'cut': ['baguette-brilliant'],
             'properties': ['recrystallized']
         },
         'amazonite': {},
         'coral': {},
         'topaz': {
-            'color': ['white', 'london blue', 'blue', 'rainforest', 'violac', 'blazing red', 'paraiba', 'aqua blue',
-                    'baby pink', 'kashmir blue', 'green', 'red']
+            'color': ['white', 'london-blue', 'blue', 'rainforest', 'violac', 'blazing-red', 'paraiba', 'aqua-blue',
+                    'baby-pink', 'kashmir-blue', 'green', 'red']
         },
         'tanzanite': {},
         'morganite': {},
@@ -45,8 +45,8 @@ RING_PROPERTIES_DICT = {
     'secondary_stones': {
         'diamonds': {
             'color': ['white', 'blue', 'coffee', 'black', 'blue'],
-            'cut': ['brilliant', 'princess', 'troidia', 'pear shaped', 'triangle', 'baguette brilliant',
-                    'marquise brilliant']
+            'cut': ['brilliant', 'princess', 'troidia', 'pear-shaped', 'triangle', 'baguette-brilliant',
+                    'marquise-brilliant']
         },
         'emeralds': {},
         'garnets': {
@@ -57,14 +57,14 @@ RING_PROPERTIES_DICT = {
         'carnelians': {},
         'chrysoprases': {},
         'lapis lazulis': {},
-        'sapphire': {
-            'color': ['blue pink', 'blue', 'green', 'pink'],
-            'cut': ['baguette brilliant'],
+        'sapphires': {
+            'color': ['blue-pink', 'blue', 'green', 'pink'],
+            'cut': ['baguette-brilliant'],
         },
         'pearls': {},
         'mother of pearl': {
             'color': ['gray']
         }
     },
-    'other': ['rhodium finish', 'black ceramic', 'black lacquer']
+    'other': ['rhodium-finish', 'black-ceramic', 'black-lacquer']
 }
