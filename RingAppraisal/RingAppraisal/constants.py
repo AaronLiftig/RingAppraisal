@@ -1,17 +1,16 @@
 RING_PROPERTIES_DICT = {
     'brand_quality': ['high-end', 'regular'],
-    'gold_color': ['yellow', 'white', 'rose'],
+    'gold_color': ['yellow', 'white', 'rose', 'black'],
     'gold_carats': [18, 14, 9],
     'primary_stone': {
         'diamond': {
             'color': ['black', 'coffee', 'white', 'blue'],
             'cut': ['brilliant', 'princess', 'troidia', 'oval', 'baguette'],
             'quality': ['VVS1', 'VVS2', 'VS1', 'VS2', 'SI'],
-            'clarity': ['D', 'E', 'F', 'G', 'OTHER'] 
+            'clarity': ['D', 'E', 'F', 'G', 'LOWER'] 
         },
         'sapphire': {
             'color': ['rose', 'blue', 'yellow', 'white', 'pink', 'green', 'black'],
-            'cut': ['brilliant', 'princess', 'troidia', 'oval', 'baguette'],
         },
         'garnet': {
             'color': ['green', 'orange', 'tsavorite'],
