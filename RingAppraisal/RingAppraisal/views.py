@@ -3,20 +3,24 @@ Routes and views for the flask application.
 '''
 
 from datetime import datetime
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, jsonify
 from RingAppraisal import app
 import joblib
 import os
 from RingAppraisal.constants import RING_PROPERTIES_DICT
+from RingAppraisal.process_data import ProcessFormData
+import sys
 
 model_path = os.path.join(app.instance_path, '..' , 'RingAppraisal', 'model.pkl')
 model = joblib.load(model_path)
+
+process_object = ProcessFormData(RING_PROPERTIES_DICT)
 
 @app.route('/', methods = ['POST', 'GET'])
 def home():
     '''Renders the home page.'''
     if request.method == 'POST':
-        secondary_stone = request.form['primary-stone']
+        d = process_object.process_form_data(request.form)
         return redirect(url_for('test', data=request.form))
         #return redirect(url_for('success',name = user))
     else:
