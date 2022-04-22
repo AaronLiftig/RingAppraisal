@@ -66,68 +66,86 @@ class ProcessFormData:
         self.additional_values = self._get_additional_options(form_data)
 
     def _get_input_row_for_model(self):
-        d = {}
+        d = {'perimeter-diamonds': 0, 'brilliant-pavé-diamonds': 0} #  zeros for model fields not in form that were excluded for various reasons 
 
         d['total diamond carats'] = self._clean_attribute(self.carat_values, 0, 0)
         d['jewel_weight'] = self._clean_attribute(self.carat_values, 1, 0)
         d['gold carats'] = self._clean_attribute(self.carat_values, 2, 0)
 
         gold_color_list = ['color_Black', 'color_Rose', 'color_White', 'color_Yellow']
-        d = self._get_input_values(d, self.radio_values, gold_color_list, 1, 'yellow', 
-                                   ['black', 'rose', 'white', 'yellow'])
+        d.update(self._get_input_values(self.radio_values, gold_color_list, 1, 'yellow', 
+                                   ['black', 'rose', 'white', 'yellow']))
 
         brand_quality_list = ['brand_Haritidis']
-        d = self._get_input_values(d, self.radio_values, brand_quality_list, 0, 'regular',
-                                   {'regular':'brand_Haritidis', 'high-end':'brand_Cartier'})
+        d.update(self._get_input_values(self.radio_values, brand_quality_list, 0, 'regular',
+                                   {'regular':'brand_Haritidis', 'high-end':'brand_Cartier'}))
+
+        additional_values_list = ['black-ceramic', 'black-lacquer', 'rhodium-finish']
+        d.update(self._get_input_values(self.additional_values, additional_values_list))
 
         # primary stone
-        d = self._get_input_values(d, self.primary_stone, self.primary_reference)
+        d.update(self._get_input_values(self.primary_stone, self.primary_reference))
         
         diamond_clarity_list = ['d','e','f','g']
         diamond_color_list = ['black-diamond','blue-diamond','coffee-diamond','white-diamond']
         diamond_cut_list = ['brilliant-diamond','princess-diamond','troidia-diamond','oval-diamond','baguette-diamond']
         diamond_quality_list = ['si','vs1','vs2','vvs1','vvs2']
         if d['diamond']:
-            d = self._get_input_values(d, self.primary_diamond_attributes, diamond_clarity_list, 0, None, 
-                                       ['D', 'E', 'F', 'G'])
-            d = self._get_input_values(d, self.primary_diamond_attributes, diamond_color_list, 1, None, 
-                                       ['black','blue','coffee','white'])
-            d = self._get_input_values(d, self.primary_diamond_attributes, diamond_cut_list, 2, None, 
-                                       ['brilliant','princess','troidia','oval','baguette'])
-            d = self._get_input_values(d, self.primary_diamond_attributes, diamond_quality_list, 3, None, 
-                                       ['SI','VS1','VS2','VVS1','VVS2'])
+            diamond_d = {}
+            d.update(self._get_input_values(self.primary_diamond_attributes, diamond_clarity_list, 0, None, # Updates d because stone is still required
+                                       ['D', 'E', 'F', 'G']))
+            diamond_d.update(self._get_input_values(self.primary_diamond_attributes, diamond_color_list, 1, None, 
+                                       ['black','blue','coffee','white']))
+            diamond_d.update(self._get_input_values(self.primary_diamond_attributes, diamond_cut_list, 2, None, 
+                                       ['brilliant','princess','troidia','oval','baguette']))
+            d.update(self._get_input_values(self.primary_diamond_attributes, diamond_quality_list, 3, None, # Updates d because stone is still required
+                                       ['SI','VS1','VS2','VVS1','VVS2']))
+            self._remove_base_stone_if_attribute_exists(diamond_d, d, 'diamond')
+            d.update(diamond_d)
         else:
             d = self._get_all_zeros(d, diamond_clarity_list + diamond_color_list + diamond_cut_list + diamond_quality_list)
 
         sapphire_color_list = ['rose-sapphire','blue-sapphire','yellow-sapphire','white-sapphire','pink-sapphire',
                                'green-sapphire','black-sapphire']
         if d['sapphire']:
-            d = self._get_input_values(d, self.primary_sapphire_addributes, sapphire_color_list, None, None, 
-                                       ['rose','blue','yellow','white','pink','green','black'])
+            sapphire_d = {}
+            sapphire_d.update(self._get_input_values(self.primary_sapphire_addributes, sapphire_color_list, None, None, 
+                                       ['rose','blue','yellow','white','pink','green','black']))
+            self._remove_base_stone_if_attribute_exists(sapphire_d, d, 'sapphire')
+            d.update(sapphire_d)
         else:
             d = self._get_all_zeros(d, sapphire_color_list)
 
         garnet_color_list = ['green-garnet','orange-garnet','tsavorite-garnet']
         if d['garnet']:
-            d = self._get_input_values(d, self.primary_garnet_attributes, garnet_color_list, None, None, 
-                                       ['green', 'orange', 'tsavorite'])
+            garnet_d = {}
+            garnet_d.update(self._get_input_values(self.primary_garnet_attributes, garnet_color_list, None, None, 
+                                       ['green', 'orange', 'tsavorite']))
+            self._remove_base_stone_if_attribute_exists(garnet_d, d, 'garnet')
+            d.update(garnet_d)
         else:
             d = self._get_all_zeros(d, garnet_color_list)
         
         pearl_type_list = ['akoya-pearl','south-sea-pearl','edison-fresh-water-pearl','fresh-water-pearl','edison-pearl']
         if d['pearl']:
-            d = self._get_input_values(d, self.primary_pearl_attributes, pearl_type_list, None, None, 
-                                       ['akoya', 'south-sea', 'edison-fresh-water', 'fresh-water', 'edison'])
+            pearl_d = {}
+            pearl_d.update(self._get_input_values(self.primary_pearl_attributes, pearl_type_list, None, None, 
+                                       ['akoya', 'south sea', 'edison fresh water', 'fresh water', 'edison']))
+            self._remove_base_stone_if_attribute_exists(pearl_d, d, 'pearl')
+            d.update(pearl_d)
         else:
             d = self._get_all_zeros(d, pearl_type_list)
 
         emerald_cut_list = ['baguette-brilliant-emerald']
         emerald_properties_list = ['recrystallized-emerald']
         if d['emerald']:
-            d = self._get_input_values(d, self.primary_emerald_attributes, emerald_cut_list, 0, None, 
-                                       ['baguette-brilliant'])
-            d = self._get_input_values(d, self.primary_emerald_attributes, emerald_properties_list, 1, None, 
-                                       ['recrystallized'])
+            emerald_d = {}
+            emerald_d.update(self._get_input_values(self.primary_emerald_attributes, emerald_cut_list, 0, None, 
+                                       ['baguette brilliant']))
+            emerald_d(self._get_input_values(self.primary_emerald_attributes, emerald_properties_list, 1, None, 
+                                       ['recrystallized']))
+            self._remove_base_stone_if_attribute_exists(emerald_d, d, 'emerald')
+            d.update(emerald_d)
         else:
             d = self._get_all_zeros(d, emerald_cut_list + emerald_properties_list)
 
@@ -135,65 +153,83 @@ class ProcessFormData:
                             'baby-pink-topaz','kashmir-blue-topaz', 'blue-topaz','white-topaz','london-blue-topaz',
                             'red-topaz','green-topaz']
         if d['topaz']:
-            d = self._get_input_values(d, self.primary_topaz_attributes, topaz_color_list, None, None, 
-                                       ['rainforest', 'violac', 'blazing-red', 'paraiba', 'aqua-blue', 'baby-pink', 
-                                        'kashmir-blue', 'blue', 'white', 'london-blue', 'red', 'green'])
+            topaz_d = {}
+            topaz_d.update(self._get_input_values(self.primary_topaz_attributes, topaz_color_list, None, None, 
+                                       ['rainforest', 'violac', 'blazing red', 'paraiba', 'aqua blue', 'baby pink', 
+                                        'kashmir blue', 'blue', 'white', 'london blue', 'red', 'green']))
+            self._remove_base_stone_if_attribute_exists(topaz_d, d, 'topaz')
+            d.update(topaz_d)
         else:
             d = self._get_all_zeros(d, topaz_color_list)
 
         quartz_color_list = ['pink-quartz']
         if d['quartz']:
-            d = self._get_input_values(d, self.primary_quartz_attributes, quartz_color_list, None, None, 
-                                       ['pink'])
+            quartz_d = {}
+            quartz_d.update(self._get_input_values(self.primary_quartz_attributes, quartz_color_list, None, None, 
+                                       ['pink']))
+            self._remove_base_stone_if_attribute_exists(quartz_d, d, 'quartz')
+            d.update(quartz_d)
         else:
             d = self._get_all_zeros(d, topaz_color_list)
 
         # secondary stones
-        d = self._get_input_values(d, self.secondary_stones, self.secondary_reference)
+        d.update(self._get_input_values(self.secondary_stones, self.secondary_reference))
 
         diamonds_color_list = ['white-diamonds', 'coffee-diamonds', 'blue-diamonds', 'black-diamonds']
         diamonds_cut_list = ['brilliant-diamonds', 'baguette-diamonds', 'princess-diamonds', 'troidia-diamonds',
                               'pear-shaped-diamonds', 'triangle-diamonds', 'baguette-brilliant-diamonds', 
                               'marquise-brilliant-diamonds']
         if d['diamonds']:
-            d = self._get_input_values(d, self.secondary_diamonds_attributes, diamonds_color_list, 0, None, 
-                                       ['white', 'coffee', 'blue', 'black'])
-            d = self._get_input_values(d, self.secondary_diamonds_attributes, diamonds_color_list, 1, None, 
-                                       ['brilliant', 'baguette', 'princess', 'troidia', 'pear-shaped', 'triangle',
-                                       'baguette-brilliant', 'marquise-brilliant'])
+            diamonds_d = {}
+            diamonds_d.update(self._get_input_values(self.secondary_diamonds_attributes, diamonds_color_list, 0, None, 
+                                       ['white', 'coffee', 'blue', 'black']))
+            diamonds_d.update(self._get_input_values(self.secondary_diamonds_attributes, diamonds_cut_list, 1, None, 
+                                       ['brilliant', 'baguette', 'princess', 'troidia', 'pear shaped', 'triangle',
+                                       'baguette brilliant', 'marquise brilliant']))
+            self._remove_base_stone_if_attribute_exists(diamonds_d, d, 'diamonds')
+            d.update(diamonds_d)
         else:
             d = self._get_all_zeros(d, diamonds_color_list + diamonds_cut_list)
 
         garnets_color_list = ['tsavorite-garnets']
         if d['garnets']:
-            d = self._get_input_values(d, self.secondary_garnets_attributes, garnets_color_list, None, None, 
-                                       ['tsavorite'])
+            garnets_d = {}
+            garnets_d.update(self._get_input_values(self.secondary_garnets_attributes, garnets_color_list, None, None, 
+                                       ['tsavorite']))
+            self._remove_base_stone_if_attribute_exists(garnets_d, d, 'garnets')
+            d.update(garnets_d)
         else:
             d = self._get_all_zeros(d, garnets_color_list)
 
         sapphires_color_list = ['blue-pink-sapphires', 'blue-sapphires', 'green-sapphires', 'pink-sapphires']
         sapphires_cut_list = ['baguette-brilliant-sapphires']
         if d['sapphires']:
-            d = self._get_input_values(d, self.secondary_sapphires_attributes, sapphires_color_list, None, None, 
-                                       ['blue-pink', 'blue', 'green', 'pink'])
+            sapphires_d = {}
+            sapphires_d.update(self._get_input_values(self.secondary_sapphires_attributes, sapphires_color_list, 0, None, 
+                                       ['blue pink', 'blue', 'green', 'pink']))
+            sapphires_d.update(self._get_input_values(self.secondary_sapphires_attributes, sapphires_cut_list, 1, None, 
+                                       ['baguette brilliant']))
+            self._remove_base_stone_if_attribute_exists(sapphires_d, d, 'sapphires')
+            d.update(sapphires_d)
         else:
             d = self._get_all_zeros(d, sapphires_color_list + sapphires_cut_list)
 
         mother_of_pearl_color_list = ['gray-mother-of-pearl']
         if d['mother-of-pearl']:
-            d = self._get_input_values(d, self.secondary_mother_of_pearl_attributes, mother_of_pearl_color_list, None, None, 
-                                       ['grey'])
+            mother_of_pearl_d = {}
+            mother_of_pearl_d.update(self._get_input_values(self.secondary_mother_of_pearl_attributes, mother_of_pearl_color_list, None, None, 
+                                       ['grey']))
+            self._remove_base_stone_if_attribute_exists(mother_of_pearl_d, d, 'mother-of-pearl')
+            d.update(mother_of_pearl_d)
         else:
             d = self._get_all_zeros(d, mother_of_pearl_color_list)
-        
-        additional_values_list = ['black-ceramic', 'black-lacquer', 'rhodium-finish']
-        d = self._get_input_values(d, self.additional_values, additional_values_list)
         return d
 
     def _create_dict(self, keys, values):
         return dict(zip(keys,values))
             
-    def _get_input_values(self, d, variable, column_list, index=None, default_value=None, conversion_keys=None):
+    def _get_input_values(self, variable, column_list, index=None, default_value=None, conversion_keys=None):
+        d = {}
         if conversion_keys:
             if isinstance(conversion_keys, list):
                 conversion_dict = self._create_dict(conversion_keys, column_list)
@@ -278,6 +314,12 @@ class ProcessFormData:
             else:
                 return 0
 
+    def _remove_base_stone_if_attribute_exists(self, attribute_d, d, stone_key):
+        if any(attribute_d.values()):
+            d[stone_key] = 0
+        return d
+
+
     def _get_primary_stone(self, data, reference):
         primary_stone = self._get_stone_data(data, 'primary-stone', reference, 'none')
         return primary_stone
@@ -326,8 +368,9 @@ class ProcessFormData:
         secondary_peridots = self._get_stone_data(data, 'secondary-peridots-stone', 'peridots')
         secondary_sapphires = self._get_stone_data(data, 'secondary-sapphires-stone', 'sapphires')
         secondary_spinels = self._get_stone_data(data, 'secondary-spinels-stone', 'spinels')
-        return (secondary_carnelians, secondary_chrysoprases, secondary_diamonds, secondary_emeralds, secondary_garnets, secondary_lapis_lazulis, secondary_mother_of_pearl,
-               secondary_pearls, secondary_peridots, secondary_sapphires, secondary_spinels)
+        return (secondary_carnelians, secondary_chrysoprases, secondary_diamonds, secondary_emeralds, secondary_garnets,
+               secondary_lapis_lazulis, secondary_mother_of_pearl, secondary_pearls, secondary_peridots, secondary_sapphires,
+               secondary_spinels)
 
     def _get_secondary_diamonds(self, data, reference_color, reference_cut):
         secondary_diamonds_color = self._get_stone_data(data, 'secondary-property-diamonds-color', reference_color, 'color')
@@ -343,8 +386,8 @@ class ProcessFormData:
         return secondary_mother_of_pearl_color
 
     def _get_secondary_sapphires(self, data, reference_color, reference_cut):
-        secondary_sapphires_color = self._get_stone_data(data, 'secondary-property-sapphire-color', reference_color, 'color')
-        secondary_sapphires_cut = self._get_stone_data(data, 'secondary-property-sapphire-cut', reference_cut, 'cut')
+        secondary_sapphires_color = self._get_stone_data(data, 'secondary-property-sapphires-color', reference_color, 'color')
+        secondary_sapphires_cut = self._get_stone_data(data, 'secondary-property-sapphires-cut', reference_cut, 'cut')
         return secondary_sapphires_color, secondary_sapphires_cut
 
     def _format_carat_values(self, data):

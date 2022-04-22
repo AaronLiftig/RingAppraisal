@@ -18,17 +18,17 @@ RING_PROPERTIES_DICT = {
         'amethyst': {},
         'onyx': {},
         'pearl': {
-            'type' : ['akoya', 'south-sea', 'edison-fresh-water', 'fresh-water', 'edison']
+            'type' : ['akoya', 'south sea', 'edison fresh water', 'fresh water', 'edison']
         },
         'emerald': {
-            'cut': ['baguette-brilliant'],
+            'cut': ['baguette brilliant'],
             'properties': ['recrystallized']
         },
         'amazonite': {},
         'coral': {},
         'topaz': {
-            'color': ['white', 'london-blue', 'blue', 'rainforest', 'violac', 'blazing-red', 'paraiba', 'aqua-blue',
-                    'baby-pink', 'kashmir-blue', 'green', 'red']
+            'color': ['white', 'london blue', 'blue', 'rainforest', 'violac', 'blazing red', 'paraiba', 'aqua blue',
+                    'baby pink', 'kashmir blue', 'green', 'red']
         },
         'tanzanite': {},
         'morganite': {},
@@ -44,8 +44,8 @@ RING_PROPERTIES_DICT = {
     'secondary_stones': {
         'diamonds': {
             'color': ['white', 'blue', 'coffee', 'black', 'blue'],
-            'cut': ['brilliant', 'princess', 'troidia', 'pear-shaped', 'triangle', 'baguette-brilliant',
-                    'marquise-brilliant']
+            'cut': ['brilliant', 'princess', 'troidia', 'pear shaped', 'triangle', 'baguette brilliant',
+                    'marquise brilliant']
         },
         'emeralds': {},
         'garnets': {
@@ -57,8 +57,8 @@ RING_PROPERTIES_DICT = {
         'chrysoprases': {},
         'lapis lazulis': {},
         'sapphires': {
-            'color': ['blue-pink', 'blue', 'green', 'pink'],
-            'cut': ['baguette-brilliant'],
+            'color': ['blue pink', 'blue', 'green', 'pink'],
+            'cut': ['baguette brilliant'],
         },
         'pearls': {},
         'mother of pearl': {
