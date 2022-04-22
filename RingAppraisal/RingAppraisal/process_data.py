@@ -142,7 +142,7 @@ class ProcessFormData:
             emerald_d = {}
             emerald_d.update(self._get_input_values(self.primary_emerald_attributes, emerald_cut_list, 0, None, 
                                        ['baguette brilliant']))
-            emerald_d(self._get_input_values(self.primary_emerald_attributes, emerald_properties_list, 1, None, 
+            emerald_d.update(self._get_input_values(self.primary_emerald_attributes, emerald_properties_list, 1, None, 
                                        ['recrystallized']))
             self._remove_base_stone_if_attribute_exists(emerald_d, d, 'emerald')
             d.update(emerald_d)
