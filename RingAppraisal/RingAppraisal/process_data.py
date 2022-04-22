@@ -1,14 +1,13 @@
-import sys
 class ProcessFormData:
     def __init__(self, constants_data):
         self._get_reference_data(constants_data)
 
     def process_form_data(self, form_data):
         self._get_form_data(form_data)
-
-        return self._get_input_row()
+        return self._get_input_row_for_model()
         
     def _get_reference_data(self,constants_data):
+        #primary stones
         self.primary_reference = list(constants_data['primary_stone'].keys())
 
         self.diamond_color_reference = constants_data['primary_stone']['diamond']['color']
@@ -30,10 +29,14 @@ class ProcessFormData:
 
         self.quartz_color_reference = constants_data['primary_stone']['quartz']['color']
 
-        self.garnets_color_reference = constants_data['primary_stone']['garnet']['color']
+        #secondary stones
+        self.secondary_reference = list(constants_data['secondary_stones'].keys())
+        self.secondary_reference = list(map((lambda x: x.replace(' ', '-')), self.secondary_reference))
 
         self.diamonds_color_reference = constants_data['secondary_stones']['diamonds']['color']
         self.diamonds_cut_reference = constants_data['secondary_stones']['diamonds']['cut']
+
+        self.garnets_color_reference = constants_data['secondary_stones']['garnets']['color']
 
         self.sapphires_color_reference = constants_data['secondary_stones']['sapphires']['color']
         self.sapphires_cut_reference = constants_data['secondary_stones']['sapphires']['cut']
@@ -50,27 +53,31 @@ class ProcessFormData:
         self.primary_emerald_attributes = self._get_primary_emerald_attributes(form_data, self.emerald_cut_reference, self.emerald_properties_reference)
         self.primary_topaz_attributes = self._get_primary_topaz_attributes(form_data, self.topaz_color_reference)
         self.primary_quartz_attributes = self._get_primary_quartz_attributes(form_data, self.quartz_color_reference)
+
+        self.secondary_stones = self._get_secondary_stones(form_data)
+
         self.secondary_diamonds_attributes = self._get_secondary_diamonds(form_data, self.diamonds_color_reference, self.diamonds_cut_reference)
         self.secondary_garnets_attributes = self._get_secondary_garnets(form_data, self.garnets_color_reference)
         self.secondary_sapphires_attributes = self._get_secondary_sapphires(form_data, self.sapphires_color_reference, self.sapphires_cut_reference)
         self.secondary_mother_of_pearl_attributes = self._get_secondary_mother_of_pearl(form_data, self.mother_of_pearl_color_reference)
+
         self.carat_values = self._format_carat_values(form_data)
         self.radio_values = self._get_radio_values(form_data)
         self.additional_values = self._get_additional_options(form_data)
 
-    def _get_input_row(self):
+    def _get_input_row_for_model(self):
         d = {}
 
         d['total diamond carats'] = self._clean_attribute(self.carat_values, 0, 0)
-        d['gold carats'] = self._clean_attribute(self.carat_values, 2, 0)
         d['jewel_weight'] = self._clean_attribute(self.carat_values, 1, 0)
+        d['gold carats'] = self._clean_attribute(self.carat_values, 2, 0)
 
-        # gold color
-        d = self._get_input_values(d, self.radio_values, ['color_Black', 'color_Rose', 'color_White', 'color_Yellow'], 1, 'yellow', 
-                                   {'black':'color_Black', 'rose':'color_Rose', 'white':'color_White', 'yellow':'color_Yellow'})
+        gold_color_list = ['color_Black', 'color_Rose', 'color_White', 'color_Yellow']
+        d = self._get_input_values(d, self.radio_values, gold_color_list, 1, 'yellow', 
+                                   ['black', 'rose', 'white', 'yellow'])
 
-        # brand quality
-        d = self._get_input_values(d, self.radio_values, ['brand_Haritidis'], 0, 'regular',
+        brand_quality_list = ['brand_Haritidis']
+        d = self._get_input_values(d, self.radio_values, brand_quality_list, 0, 'regular',
                                    {'regular':'brand_Haritidis', 'high-end':'brand_Cartier'})
 
         # primary stone
@@ -92,7 +99,8 @@ class ProcessFormData:
         else:
             d = self._get_all_zeros(d, diamond_clarity_list + diamond_color_list + diamond_cut_list + diamond_quality_list)
 
-        sapphire_color_list = ['rose-sapphire','blue-sapphire','yellow-sapphire','white-sapphire','pink-sapphire','green-sapphire','black-sapphire']
+        sapphire_color_list = ['rose-sapphire','blue-sapphire','yellow-sapphire','white-sapphire','pink-sapphire',
+                               'green-sapphire','black-sapphire']
         if d['sapphire']:
             d = self._get_input_values(d, self.primary_sapphire_addributes, sapphire_color_list, None, None, 
                                        ['rose','blue','yellow','white','pink','green','black'])
@@ -123,67 +131,63 @@ class ProcessFormData:
         else:
             d = self._get_all_zeros(d, emerald_cut_list + emerald_properties_list)
 
-        topaz_color_list = ['rainforest-topaz','violac-topaz','blazing-red-topaz','paraiba-topaz','aqua-blue-topaz','baby-pink-topaz','kashmir-blue-topaz',
-                                'blue-topaz','white-topaz','london-blue-topaz','red-topaz','green-topaz']
+        topaz_color_list = ['rainforest-topaz','violac-topaz','blazing-red-topaz','paraiba-topaz','aqua-blue-topaz',
+                            'baby-pink-topaz','kashmir-blue-topaz', 'blue-topaz','white-topaz','london-blue-topaz',
+                            'red-topaz','green-topaz']
         if d['topaz']:
             d = self._get_input_values(d, self.primary_topaz_attributes, topaz_color_list, None, None, 
-                                       ['rainforest', 'violac', 'blazing-red', 'paraiba', 'aqua-blue', 'baby-pink', 'kashmir-blue', 'blue', 'white', 'london-blue',
-                                        'red', 'green'])
+                                       ['rainforest', 'violac', 'blazing-red', 'paraiba', 'aqua-blue', 'baby-pink', 
+                                        'kashmir-blue', 'blue', 'white', 'london-blue', 'red', 'green'])
         else:
             d = self._get_all_zeros(d, topaz_color_list)
 
-        '''
-        ['brilliant-diamonds']
-        ['black-ceramic']
-        ['amethyst']
-        ['emeralds']
-        ['onyx']
-        ['black-lacquer']
-        ['tsavorite-garnets']        
-        ['peridots']
-        ['diamonds']
-        ['gray-mother-of-pearl']
-        ['spinels']
-        ['carnelians']
-        ['chrysoprases']
-        ['lapis-lazulis']
-        ['brilliant-pavé-diamonds']
-        ['baguette-diamonds']
-        ['princess-diamonds']
-        ['troidia-diamonds']
-        ['rhodium-finish']
-        ['pear-shaped-diamonds']
-        ['amazonite']
-        ['coral']
-        ['tanzanite']
-        ['morganite']
-        ['ruby']
-        ['citrine']
-        ['qendrad']
-        ['triangle-diamonds']
-        ['spinel']
-        ['blue-pink-sapphires']
-        ['blue-sapphires']
-        ['white-diamonds']
-        ['opal']
-        ['aquamarine']
-        ['sapphires']
-        ['baguette-brilliant-diamonds']
-        ['marquise-brilliant-diamonds']
-        ['rodolite']
-        ['coffee-diamonds']
-        ['baguette-brilliant-sapphires']
-        ['black-diamonds']
-        ['pearls']
-        ['blue-diamonds']
-        ['green-sapphires']
-        ['pink-sapphires']
-        ['zoisite']
-        ['pink-quartz']
-        ['quartz']
-        ['tourmaline']
-        ['mother-of-pearl']
-        '''
+        quartz_color_list = ['pink-quartz']
+        if d['quartz']:
+            d = self._get_input_values(d, self.primary_quartz_attributes, quartz_color_list, None, None, 
+                                       ['pink'])
+        else:
+            d = self._get_all_zeros(d, topaz_color_list)
+
+        # secondary stones
+        d = self._get_input_values(d, self.secondary_stones, self.secondary_reference)
+
+        diamonds_color_list = ['white-diamonds', 'coffee-diamonds', 'blue-diamonds', 'black-diamonds']
+        diamonds_cut_list = ['brilliant-diamonds', 'baguette-diamonds', 'princess-diamonds', 'troidia-diamonds',
+                              'pear-shaped-diamonds', 'triangle-diamonds', 'baguette-brilliant-diamonds', 
+                              'marquise-brilliant-diamonds']
+        if d['diamonds']:
+            d = self._get_input_values(d, self.secondary_diamonds_attributes, diamonds_color_list, 0, None, 
+                                       ['white', 'coffee', 'blue', 'black'])
+            d = self._get_input_values(d, self.secondary_diamonds_attributes, diamonds_color_list, 1, None, 
+                                       ['brilliant', 'baguette', 'princess', 'troidia', 'pear-shaped', 'triangle',
+                                       'baguette-brilliant', 'marquise-brilliant'])
+        else:
+            d = self._get_all_zeros(d, diamonds_color_list + diamonds_cut_list)
+
+        garnets_color_list = ['tsavorite-garnets']
+        if d['garnets']:
+            d = self._get_input_values(d, self.secondary_garnets_attributes, garnets_color_list, None, None, 
+                                       ['tsavorite'])
+        else:
+            d = self._get_all_zeros(d, garnets_color_list)
+
+        sapphires_color_list = ['blue-pink-sapphires', 'blue-sapphires', 'green-sapphires', 'pink-sapphires']
+        sapphires_cut_list = ['baguette-brilliant-sapphires']
+        if d['sapphires']:
+            d = self._get_input_values(d, self.secondary_sapphires_attributes, sapphires_color_list, None, None, 
+                                       ['blue-pink', 'blue', 'green', 'pink'])
+        else:
+            d = self._get_all_zeros(d, sapphires_color_list + sapphires_cut_list)
+
+        mother_of_pearl_color_list = ['gray-mother-of-pearl']
+        if d['mother-of-pearl']:
+            d = self._get_input_values(d, self.secondary_mother_of_pearl_attributes, mother_of_pearl_color_list, None, None, 
+                                       ['grey'])
+        else:
+            d = self._get_all_zeros(d, mother_of_pearl_color_list)
+        
+        additional_values_list = ['black-ceramic', 'black-lacquer', 'rhodium-finish']
+        d = self._get_input_values(d, self.additional_values, additional_values_list)
         return d
 
     def _create_dict(self, keys, values):
@@ -191,16 +195,29 @@ class ProcessFormData:
             
     def _get_input_values(self, d, variable, column_list, index=None, default_value=None, conversion_keys=None):
         if conversion_keys:
-            conversion_dict = self._create_dict(conversion_keys, column_list)
+            if isinstance(conversion_keys, list):
+                conversion_dict = self._create_dict(conversion_keys, column_list)
+            elif isinstance(conversion_keys, dict):
+                conversion_dict = conversion_keys
         else:
             conversion_dict = None
 
-        value = self._clean_attribute(variable, index=index, default_value=default_value, conversion_dict=conversion_dict)
-        for v in column_list:
-            if v == value:
-                d[v] = 1
-            else:
-                d[v] = 0
+        if isinstance(variable, tuple) and index is None:
+            l = []
+            for var in variable:
+                l.append(self._clean_attribute(var, index=index, default_value=default_value, conversion_dict=conversion_dict))
+            for v in column_list:
+                if v in l:
+                    d[v] = 1
+                else:
+                    d[v] = 0
+        else:
+            value = self._clean_attribute(variable, index=index, default_value=default_value, conversion_dict=conversion_dict)
+            for v in column_list:
+                if v == value:
+                    d[v] = 1
+                else:
+                    d[v] = 0
         return d
 
     def _get_all_zeros(self, d, columns_list):
@@ -270,11 +287,6 @@ class ProcessFormData:
         primary_diamond_color = self._get_stone_data(data, 'primary-property-diamond-color', reference_color, 'color')
         primary_diamond_cut = self._get_stone_data(data, 'primary-property-diamond-cut', reference_cut, 'cut')
         primary_diamond_quality = self._get_stone_data(data, 'primary-property-diamond-quality', reference_quality, 'quality')
-
-        if primary_diamond_clairy:
-            primary_diamond_clairy = map((lambda x: x.lower()), primary_diamond_clairy)
-        if primary_diamond_quality:
-            primary_diamond_quality = map((lambda x: x.lower()), primary_diamond_quality)
         return primary_diamond_clairy, primary_diamond_color, primary_diamond_cut, primary_diamond_quality
 
     def _get_primary_emerald_attributes(self, data, reference_cut, reference_properties):
@@ -302,55 +314,38 @@ class ProcessFormData:
         primary_topaz_color = self._get_stone_data(data, 'primary-property-topaz-color', reference, 'color')
         return primary_topaz_color
 
-    def _get_secondary_carnelians(self, data, reference):
+    def _get_secondary_stones(self, data):
         secondary_carnelians = self._get_stone_data(data, 'secondary-carnelians-stone', 'carnelians')
-        return secondary_carnelians
-
-    def _get_secondary_chrysoprases(self, data, reference):
         secondary_chrysoprases = self._get_stone_data(data, 'secondary-chrysoprases-stone', 'chrysoprases')
-        return secondary_chrysoprases
+        secondary_diamonds = self._get_stone_data(data, 'secondary-diamonds-stone', 'diamonds')
+        secondary_emeralds = self._get_stone_data(data, 'secondary-emeralds-stone', 'emeralds')
+        secondary_garnets = self._get_stone_data(data, 'secondary-garnets-stone', 'garnets')
+        secondary_lapis_lazulis = self._get_stone_data(data, 'secondary-lapis-lazulis-stone', 'lapis-lazulis')
+        secondary_mother_of_pearl = self._get_stone_data(data, 'secondary-mother-of-pearl-stone', 'mother-of-pearl')
+        secondary_pearls = self._get_stone_data(data, 'secondary-pearls-stone', 'pearls')
+        secondary_peridots = self._get_stone_data(data, 'secondary-peridots-stone', 'peridots')
+        secondary_sapphires = self._get_stone_data(data, 'secondary-sapphires-stone', 'sapphires')
+        secondary_spinels = self._get_stone_data(data, 'secondary-spinels-stone', 'spinels')
+        return (secondary_carnelians, secondary_chrysoprases, secondary_diamonds, secondary_emeralds, secondary_garnets, secondary_lapis_lazulis, secondary_mother_of_pearl,
+               secondary_pearls, secondary_peridots, secondary_sapphires, secondary_spinels)
 
     def _get_secondary_diamonds(self, data, reference_color, reference_cut):
-        secondary_diamonds = self._get_stone_data(data, 'secondary-diamonds-stone', 'diamonds')
         secondary_diamonds_color = self._get_stone_data(data, 'secondary-property-diamonds-color', reference_color, 'color')
         secondary_diamonds_cut = self._get_stone_data(data, 'secondary-property-diamonds-cut', reference_cut, 'cut')
-        return secondary_diamonds, secondary_diamonds_color, secondary_diamonds_cut
-
-    def _get_secondary_emeralds(self, data, reference):
-        secondary_emeralds = self._get_stone_data(data, 'secondary-emeralds-stone', 'emeralds')
-        return secondary_emeralds
+        return secondary_diamonds_color, secondary_diamonds_cut
 
     def _get_secondary_garnets(self, data, reference):
-        secondary_garnets = self._get_stone_data(data, 'secondary-garnets-stone', 'garnets')
         secondary_garnets_color = self._get_stone_data(data, 'secondary-property-garnets-color', reference, 'color')
-        return secondary_garnets, secondary_garnets_color
-
-    def _get_secondary_lapis_lazulis(self, data, reference):
-        secondary_lapis_lazulis = self._get_stone_data(data, 'secondary-lapis-lazulis-stone', 'lapis-lazulis')
-        return secondary_lapis_lazulis
+        return secondary_garnets_color
 
     def _get_secondary_mother_of_pearl(self, data, reference):
-        secondary_mother_of_pearl = self._get_stone_data(data, 'secondary-mother-of-pearl-stone', 'mother-of-pearl')
         secondary_mother_of_pearl_color = self._get_stone_data(data, 'secondary-property-mother-of-pearl-color', reference, 'color')
-        return secondary_mother_of_pearl, secondary_mother_of_pearl_color
-
-    def _get_secondary_pearls(self, data, reference):
-        secondary_pearls = self._get_stone_data(data, 'secondary-pearls-stone', 'pearls')
-        return secondary_pearls
-
-    def _get_secondary_peridots(self, data, reference):
-        secondary_peridots = self._get_stone_data(data, 'secondary-peridots-stone', 'peridots')
-        return secondary_peridots
+        return secondary_mother_of_pearl_color
 
     def _get_secondary_sapphires(self, data, reference_color, reference_cut):
-        secondary_sapphires = self._get_stone_data(data, 'secondary-sapphire-stone', 'sapphire')
         secondary_sapphires_color = self._get_stone_data(data, 'secondary-property-sapphire-color', reference_color, 'color')
         secondary_sapphires_cut = self._get_stone_data(data, 'secondary-property-sapphire-cut', reference_cut, 'cut')
-        return secondary_sapphires, secondary_sapphires_color, secondary_sapphires_cut
-
-    def _get_secondary_spinels(self, data, reference):
-        secondary_spinels = self._get_stone_data(data, 'secondary-spinels-stone', 'spinels')
-        return secondary_spinels
+        return secondary_sapphires_color, secondary_sapphires_cut
 
     def _format_carat_values(self, data):
         diamond_carats = self._get_carat_attribute(data, 'total-diamond-carats', float, (lambda x: x >= 0 and x <= 8))

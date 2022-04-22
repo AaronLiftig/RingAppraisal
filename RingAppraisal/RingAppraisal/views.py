@@ -21,8 +21,13 @@ def home():
     '''Renders the home page.'''
     if request.method == 'POST':
         d = process_object.process_form_data(request.form)
+        print(d)
+        #return render_template(
+        #    'index.html',
+        #    ring_properties_dict=RING_PROPERTIES_DICT,
+        #    title='Home Page',
+        #    year=datetime.now().year)
         return redirect(url_for('test', data=request.form))
-        #return redirect(url_for('success',name = user))
     else:
         return render_template(
             'index.html',

@@ -62,7 +62,7 @@ RING_PROPERTIES_DICT = {
         },
         'pearls': {},
         'mother of pearl': {
-            'color': ['gray']
+            'color': ['grey']
         }
     },
     'other': ['rhodium-finish', 'black-ceramic', 'black-lacquer']
