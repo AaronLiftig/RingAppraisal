@@ -14,7 +14,6 @@ class ProcessFormData:
         self.diamond_cut_reference = constants_data['primary_stone']['diamond']['cut']
         self.diamond_quality_reference = constants_data['primary_stone']['diamond']['quality']
         self.diamond_clarity_reference = constants_data['primary_stone']['diamond']['clarity']
-        self.diamond_clarity_reference.remove('LOWER')
 
         self.sapphire_color_reference = constants_data['primary_stone']['sapphire']['color']
 
@@ -86,14 +85,14 @@ class ProcessFormData:
         # primary stone
         d.update(self._get_input_values(self.primary_stone, self.primary_reference))
         
-        diamond_clarity_list = ['d','e','f','g']
+        diamond_clarity_list = ['d','e','f','g', 'i']
         diamond_color_list = ['black-diamond','blue-diamond','coffee-diamond','white-diamond']
         diamond_cut_list = ['brilliant-diamond','princess-diamond','troidia-diamond','oval-diamond','baguette-diamond']
         diamond_quality_list = ['si','vs1','vs2','vvs1','vvs2']
         if d['diamond']:
             diamond_d = {}
             d.update(self._get_input_values(self.primary_diamond_attributes, diamond_clarity_list, 0, None, # Updates d because stone is still required
-                                       ['D', 'E', 'F', 'G']))
+                                       ['D', 'E', 'F', 'G', 'LOWER']))
             diamond_d.update(self._get_input_values(self.primary_diamond_attributes, diamond_color_list, 1, None, 
                                        ['black','blue','coffee','white']))
             diamond_d.update(self._get_input_values(self.primary_diamond_attributes, diamond_cut_list, 2, None, 
@@ -109,7 +108,7 @@ class ProcessFormData:
                                'green-sapphire','black-sapphire']
         if d['sapphire']:
             sapphire_d = {}
-            sapphire_d.update(self._get_input_values(self.primary_sapphire_addributes, sapphire_color_list, None, None, 
+            sapphire_d.update(self._get_input_values(self.primary_sapphire_attributes, sapphire_color_list, None, None, 
                                        ['rose','blue','yellow','white','pink','green','black']))
             self._remove_base_stone_if_attribute_exists(sapphire_d, d, 'sapphire')
             d.update(sapphire_d)
@@ -123,8 +122,13 @@ class ProcessFormData:
                                        ['green', 'orange', 'tsavorite']))
             self._remove_base_stone_if_attribute_exists(garnet_d, d, 'garnet')
             d.update(garnet_d)
+
+            if d['garnet']: # Done to account for a lack of lone "garnet" in model data
+                del d['garnet']
+                d['orange-garnet'] = 1
         else:
             d = self._get_all_zeros(d, garnet_color_list)
+            del d['garnet']
         
         pearl_type_list = ['akoya-pearl','south-sea-pearl','edison-fresh-water-pearl','fresh-water-pearl','edison-pearl']
         if d['pearl']:
@@ -170,7 +174,7 @@ class ProcessFormData:
             self._remove_base_stone_if_attribute_exists(quartz_d, d, 'quartz')
             d.update(quartz_d)
         else:
-            d = self._get_all_zeros(d, topaz_color_list)
+            d = self._get_all_zeros(d, quartz_color_list)
 
         # secondary stones
         d.update(self._get_input_values(self.secondary_stones, self.secondary_reference))
@@ -193,13 +197,16 @@ class ProcessFormData:
 
         garnets_color_list = ['tsavorite-garnets']
         if d['garnets']:
-            garnets_d = {}
-            garnets_d.update(self._get_input_values(self.secondary_garnets_attributes, garnets_color_list, None, None, 
-                                       ['tsavorite']))
-            self._remove_base_stone_if_attribute_exists(garnets_d, d, 'garnets')
-            d.update(garnets_d)
+            #garnets_d = {}
+            #garnets_d.update(self._get_input_values(self.secondary_garnets_attributes, garnets_color_list, None, None, 
+            #                           ['tsavorite']))
+            #self._remove_base_stone_if_attribute_exists(garnets_d, d, 'garnets')
+            #d.update(garnets_d)
+            del d['garnets'] # Done to account for a lack of lone "garnets" in model data
+            d['tsavorite-garnets'] = 1
         else:
             d = self._get_all_zeros(d, garnets_color_list)
+            del d['garnets']
 
         sapphires_color_list = ['blue-pink-sapphires', 'blue-sapphires', 'green-sapphires', 'pink-sapphires']
         sapphires_cut_list = ['baguette-brilliant-sapphires']

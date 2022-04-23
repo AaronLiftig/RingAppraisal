@@ -4,30 +4,31 @@
     "gold_carats": [ 18, 14, 9 ],
     "primary_stone": {
         "diamond": {
-            "color": [ "black", "coffee", "white", "blue" ],
-            "cut": [ "brilliant", "princess", "troidia", "oval", "baguette" ],
-            "quality": [ "VVS1", "VVS2", "VS1", "VS2", "SI" ],
-            "clarity": [ "D", "E", "F", "G", "LOWER" ]
+          "color": [ "black", "coffee", "white", "blue" ],
+          "cut": [ "brilliant", "princess", "troidia", "oval", "baguette" ],
+          "quality": [ "VVS1", "VVS2", "VS1", "VS2", "SI" ],
+          "clarity": [ "D", "E", "F", "G", "LOWER" ]
         },
         "sapphire": {
-            "color": [ "rose", "blue", "yellow", "white", "pink", "green", "black" ]
+          "color": [ "rose", "blue", "yellow", "white", "pink", "green", "black" ]
         },
         "garnet": {
-            "color": [ "green", "orange", "tsavorite" ]
+          "color": [ "green", "orange", "tsavorite" ]
         },
         "amethyst": {},
         "onyx": {},
         "pearl": {
-            "type": [ "akoya", "south sea", "edison fresh water", "fresh water", "edison" ]
+          "type": [ "akoya", "south sea", "edison fresh water", "fresh water", "edison" ]
         },
         "emerald": {
-            "cut": [ "baguette brilliant" ],
-            "properties": [ "recrystallized" ]
+          "cut": [ "baguette brilliant" ],
+          "properties": [ "recrystallized" ]
         },
         "amazonite": {},
         "coral": {},
         "topaz": {
-            "color": [ "white", "london blue", "blue", "rainforest", "violac", "blazing red", "paraiba", "aqua blue", "baby pink", "kashmir blue", "green", "red" ] 
+          "color": [ "white", "london blue", "blue", "rainforest", "violac", "blazing red", "paraiba", "aqua blue", "baby pink",
+                     "kashmir blue", "green", "red" ]
         },
         "tanzanite": {},
         "morganite": {},
@@ -36,9 +37,13 @@
         "qendrad": {},
         "zoisite": {},
         "quartz": {
-            "color": [ "pink" ]
+          "color": [ "pink" ]
         },
-        "tourmaline": {}
+        "tourmaline": {},
+        "spinel": {},
+        "opal": {},
+        "aquamarine": {},
+        "rodolite": {}
     },
     "secondary_stones": {
         "diamonds": {
