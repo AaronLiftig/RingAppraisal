@@ -37,22 +37,27 @@ def home():
             num_of_months = (today_date.year - start_date.year) * 12 + today_date.month - start_date.month
             t = num_of_months / 12
 
-            current_price = price * (1 + r/12) ** (12 * t) # Compound interest formula
-            formatted_current_price = round(current_price, 2)
-            return redirect(url_for('test', data=formatted_current_price))
+            current_price = price * (1 + r/12)**(12 * t) # Compound interest formula
+            rounded_current_price = f'{current_price:,.2f}'
+            return redirect(url_for('result', data=rounded_current_price))
         else:
-            return redirect(url_for('test', data=price))
+            return redirect(url_for('result', data=price))
     else:
         return render_template(
             'index.html',
             ring_properties_dict=RING_PROPERTIES_DICT,
             title='Home Page',
             year=datetime.now().year
-    )
+        )
 
-@app.route('/test/<data>')
-def test(data):
-    return f"{data}"
+@app.route('/result/<data>')
+def result(data):
+    return render_template(
+            'result.html',
+            data = data,
+            title='Result',
+            year=datetime.now().year
+    )
 
 @app.route('/contact')
 def contact():
@@ -60,8 +65,7 @@ def contact():
     return render_template(
         'contact.html',
         title='Contact',
-        year=datetime.now().year,
-        message='Your contact page.'
+        year=datetime.now().year
     )
 
 @app.route('/about')
@@ -70,6 +74,5 @@ def about():
     return render_template(
         'about.html',
         title='About',
-        year=datetime.now().year,
-        message='Your application description page.'
+        year=datetime.now().year
     )
