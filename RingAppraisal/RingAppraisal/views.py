@@ -7,11 +7,12 @@ from flask import Flask, render_template, redirect, url_for, request, jsonify
 from RingAppraisal import app
 import joblib
 import os
-import pandas as pd
-from RingAppraisal.constants import RING_PROPERTIES_DICT, INPUT_COLUMNS_LIST
+from pandas import DataFrame
+from RingAppraisal.static.data.constants import RING_PROPERTIES_DICT, INPUT_COLUMNS_LIST
 from RingAppraisal.process_data import ProcessFormData
 
-model_path = os.path.join(app.instance_path, '..' , 'RingAppraisal', 'model.pkl')
+
+model_path = os.path.join(app.instance_path, '..', 'RingAppraisal', 'static', 'data', 'model.pkl')
 model = joblib.load(model_path)
 
 process_object = ProcessFormData(RING_PROPERTIES_DICT)
@@ -24,7 +25,7 @@ def home():
         # print(d)
 
         input_row = [[d[col] for col in INPUT_COLUMNS_LIST]]
-        df_row = pd.DataFrame(input_row, columns=INPUT_COLUMNS_LIST)
+        df_row = DataFrame(input_row, columns=INPUT_COLUMNS_LIST)
 
         price = model.predict(df_row)[0]
         # print(price)

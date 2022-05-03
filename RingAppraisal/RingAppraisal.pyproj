@@ -27,7 +27,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="RingAppraisal\constants.py">
+    <Compile Include="RingAppraisal\static\data\constants.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RingAppraisal\process_data.py">
@@ -46,7 +46,7 @@
     <Folder Include="RingAppraisal\templates\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="RingAppraisal\model.pkl" />
+    <Content Include="RingAppraisal\static\data\model.pkl" />
     <Content Include="RingAppraisal\static\data\data.json" />
     <Content Include="RingAppraisal\static\scripts\script.js" />
     <Content Include="RingAppraisal\templates\about.html" />
