@@ -1,40 +1,25 @@
-$(document).ready(function () {
+$(document).ready(function () { // On page load
     fetch("./static/data/data.json").then(data => {
         return data.json()
     }).then(data => {
-        $("#primary-none-radio").change(function () {
-            $(".primary-property-radio").hide()
-        })
+        // hide primary dropdowns
         $(".primary-property-radio").hide()
-        for (const val in data.primary_stone) {
-            const valDict = data.primary_stone[val];
-            $("#primary-" + val + "-radio").change(function () {
-                $(".primary-property-radio").hide()
-                if (Object.keys(valDict).length !== 0) {
-                    if ($(this).is(":checked")) {
-                        for (const prop in valDict) {
-                            $("#primary-" + val + "-" + prop + "-dropdown").show();
-                        }
-                    }
-                }
-            })
-        }
 
+        // hide secondary dropdowns
         $(".secondary-property-checkbox").hide();
-        for (const val in data.secondary_stones) {
-            const valDict = data.secondary_stones[val];
-            if (Object.keys(valDict).length !== 0) {
-                const idVal = val.replaceAll(" ", "-")
-                for (const prop in valDict) {
-                    $("#secondary-" + idVal + "-checkbox").change(function () {
-                        if ($(this).is(":checked")) {
-                            $("#secondary-" + idVal + "-" + prop + "-dropdown").show();
-                        } else {
-                            $("#secondary-" + idVal + "-" + prop + "-dropdown").hide();
-                        }
-                    })
-                }
-            }
-        }
     });
 })
+
+function ChangePrimaryDropdowns(tag) {
+    $(".primary-property-radio").hide()
+    $(".primary-property-" + tag.value + "-radio").show()
+}
+
+function ChangeSecondaryDropdowns(tag) {
+    if ($(tag).is(":checked")) {
+        $(".secondary-property-" + tag.value + "-checkbox").show()
+    }
+    else {
+        $(".secondary-property-" + tag.value + "-checkbox").hide()
+    }
+}
