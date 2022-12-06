@@ -5,10 +5,14 @@
 <div class="jumbotron text-center">
     <h1>Appraise your gold rings for free!</h1>
 </div>
-<form method="post" action="#">
+<form method="post" action="">
     <div class="row">
-        <div class="col-md-12 calc-button-div">
+        <div class="col-md-6 calc-button-div">
             <button type="submit" class="calc-button"><h3>CALCULATE</h3></button>
+        </div>
+        <div class="col-md-6 calc-button-div">
+            <h3>Appraised Value:</h3>
+            <div><h3 id="price"></h3></div>
         </div>
     </div>
     <div class="row">
@@ -129,11 +133,6 @@
                 </div>
                 {% endfor %}
             </fieldset>
-        </div>
-    </div>
-    <div class="row">
-        <div class="text-center calc-button-div">
-            <button type="submit" class="calc-button"><h3>CALCULATE</h3></button>
         </div>
     </div>
 </form>

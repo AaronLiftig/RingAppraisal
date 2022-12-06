@@ -1,4 +1,4 @@
-$(document).ready(function () { // On page load
+$(document).ready(function () {
     fetch("./static/data/data.json").then(data => {
         return data.json()
     }).then(data => {
@@ -8,6 +8,16 @@ $(document).ready(function () { // On page load
         // hide secondary dropdowns
         $(".secondary-property-checkbox").hide();
     });
+
+    $('form').bind('submit', function (event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+        fetch('/data', {
+            method: 'POST',
+            body: formData,
+        }).then((data) => data.json())
+            .then((jsonData) => $('#price').html('&nbsp;$' + jsonData.price));
+    })
 })
 
 function ChangePrimaryDropdowns(tag) {
@@ -23,3 +33,4 @@ function ChangeSecondaryDropdowns(tag) {
         $(".secondary-property-" + tag.value + "-checkbox").hide()
     }
 }
+
