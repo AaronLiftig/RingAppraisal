@@ -60,9 +60,13 @@ input[type="checkbox"].input-validation-error {
 .property-div {
     text-align: left;
     width: 300px;
-    padding-left: 100px
+    padding-left: 50px
 }
 
 legend {
     padding: 10px 5px 2px 5px
+}
+
+#primary-col {
+    column-count: 2
 }
