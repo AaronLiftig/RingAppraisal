@@ -3,7 +3,7 @@ Routes and views for the flask application.
 '''
 
 from datetime import datetime
-from flask import Flask, render_template, redirect, url_for, request, jsonify
+from flask import Flask, render_template, url_for, request, jsonify
 from RingAppraisal import app
 import joblib
 import os
@@ -27,7 +27,7 @@ def home():
         year=datetime.now().year
     )
 
-@app.route('/data', methods = ['GET', 'POST'])
+@app.route('/data', methods = ['POST'])
 def appraisal():
     d = process_object.process_form_data(request.form)
 
